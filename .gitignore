@@ -78,3 +78,4 @@ debian/files
 
 # data
 *.vec
+*.zip
