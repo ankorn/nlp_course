@@ -79,3 +79,4 @@ debian/files
 # data
 *.vec
 *.zip
+week03_lm/arxivData.json
