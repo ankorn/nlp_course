@@ -1,13 +1,7 @@
 Defaulting to user installation because normal site-packages is not writeable
-Collecting subword-nmt
-  Downloading subword_nmt-0.3.8-py3-none-any.whl.metadata (9.2 kB)
-Collecting mock (from subword-nmt)
-  Downloading mock-5.1.0-py3-none-any.whl.metadata (3.0 kB)
+Requirement already satisfied: subword-nmt in /Users/ant.korneev/Library/Python/3.9/lib/python/site-packages (0.3.8)
+Requirement already satisfied: mock in /Users/ant.korneev/Library/Python/3.9/lib/python/site-packages (from subword-nmt) (5.1.0)
 Requirement already satisfied: tqdm in /Users/ant.korneev/Library/Python/3.9/lib/python/site-packages (from subword-nmt) (4.66.5)
-Downloading subword_nmt-0.3.8-py3-none-any.whl (27 kB)
-Downloading mock-5.1.0-py3-none-any.whl (30 kB)
-Installing collected packages: mock, subword-nmt
-Successfully installed mock-5.1.0 subword-nmt-0.3.8
 
 [1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip is available: [0m[31;49m24.2[0m[39;49m -> [0m[32;49m24.3.1[0m
 [1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49m/Library/Developer/CommandLineTools/usr/bin/python3 -m pip install --upgrade pip[0m
