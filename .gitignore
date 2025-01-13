@@ -80,3 +80,4 @@ debian/files
 *.vec
 *.zip
 week03_lm/arxivData.json
+week05_transfer/deberta_train
