@@ -23,8 +23,8 @@
 [приложение](https://ankorn.github.io/arcanumsearch/) · [код](https://github.com/ankorn/arcanumsearch) · [задачи](https://github.com/ankorn/arcanumsearch/blob/main/TASKS.md)
 
 - Обучил dense retriever на `BAAI/bge-m3`; сравнил `MultipleNegativesRankingLoss` и `GISTEmbedLoss`, выбрал оптимум по трейд-оффу recall@k / память / скорость
-- Построил пайплайн генерации синтетических обучающих запросов через Qwen; prompt-engineering'ом устранил утечку скрытой информации, а переход на модель побольше (7B → 14B) убрал слишком невнятные запросы — **recall@5 вырос с 0.90 до 0.96**
-- Реализовал майнинг hard negatives; диагностировал и смягчил catastrophic forgetting
+- Построил пайплайн генерации синтетических запросов на Qwen: устранил утечку скрытой информации через промпт-инжиниринг, заменил генератор на Qwen-14B — recall@5: 0.90 → 0.96, ndcg@10: 0.70 → 0.73
+- Реализовал майнинг hard negatives на FAISS, что устранило застой метрик (recall@k / ndcg) при дообучении на базовом датасете
 - Развернул инференс в проде: эмбеддинги в PostgreSQL + pgvector (Supabase), KNN-поиск через SQL-функцию, feature extraction на HF Spaces (Zero GPU)
 - Спроектировал data-пайплайн: скрапинг через Yandex Cloud Functions с обходом rate-limit, чанкинг по секциям, дедупликация, фильтрация stub/aggregator-страниц, нормализация Reddit-тредов
 - По результатам продуктового анализа переориентировал продукт на уникальную ценность — cross-community поиск (патчи, моды, баги из Reddit / Nexus Mods), недоступный в нативном поиске Fandom
@@ -56,7 +56,7 @@ Text classification · language modeling · seq2seq · attention · transformers
 Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · систематический HPO · диагностика переобучения и catastrophic forgetting · генерация синтетических данных через LLM
 
 **Метрики**
-recall@k · ROUGE(rouge1, rougeLsum) · RAGAS(SummaryScore, SemanticSimilarity)
+recall@k · ndcg@k · ROUGE(rouge1, rougeLsum) · RAGAS(SummaryScore, SemanticSimilarity)
 
 **Инференс / MLOps**
 ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces (Zero GPU), Supabase Edge Functions, Yandex Cloud Functions
