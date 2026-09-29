@@ -64,7 +64,7 @@ ONNX / Optimum, квантизация (q4/q8), браузерный inference (
 **Стек**
 Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · TypeScript, React
 
-**Обучение (подтверждение теории)**
+**Обучение**
 NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/nlp_course)) — обучал модели по всем темам · NLP Course For You · ML Crash Course · Deep Learning Specialization (Andrew Ng)
 
 ---
@@ -72,7 +72,7 @@ NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/
 ## Опыт работы
 
 ### Т-Банк — Frontend Engineer · 2023–2026
-- Настроил мониторинг процессных и продуктовых метрик, индикаторы доступности и алертинг для микрофронтов *(навык, применимый к ML-observability)*
+- Настроил мониторинг процессных и продуктовых метрик(с помощью Grafana), индикаторы доступности и алертинг для микрофронтов *(навык, применимый к ML-observability)*
 - Самостоятельно вывел в прод три продукта в микрофронтовой архитектуре личного кабинета
 - Год вёл алгоритмическую секцию технических интервью; менторил стажёра до junior-позиции
 
