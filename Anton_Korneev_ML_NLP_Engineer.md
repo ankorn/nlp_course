@@ -1,9 +1,11 @@
+---
+---
 
 ---
 
 # Антон Корнеев
 
-**ML / NLP Engineer** (ex-Frontend) · PyTorch · HF Transformers · RAG · LoRA
+**ML / NLP Engineer** (ex-Frontend) · PyTorch · HF Transformers · Agentic RAG · LoRA
 
 +7 993 465 45 10 · tg: @ankornlog · [GitHub](https://github.com/ankorn) · [HuggingFace](https://huggingface.co/pameydorke)
 
@@ -11,26 +13,29 @@
 
 ## Summary
 
-Инженер с 9-летним опытом продакшн-разработки, специализируюсь на NLP. Строю end-to-end ML-решения: от подготовки данных и обучения моделей до деплоя в прод. Построил два самостоятельных проекта, покрывающих ключевые NLP-задачи — retrieval с contrastive learning и файнтюнинг мультимодальной LLM для суммаризации с inference полностью в браузере. Ищу позицию ML/NLP Engineer.
+Инженер с 9-летним опытом продакшн-разработки, специализируюсь на NLP и LLM-приложениях. Строю end-to-end системы: от подготовки данных и обучения моделей до деплоя в прод. Фокус — agentic RAG: retrieval, tool calling, streaming, MCP-интеграции. Реализовал два самостоятельных проекта: cross-community поиск с обученным dense retriever и LLM-агентом поверх него, а также файнтюнинг мультимодальной LLM для суммаризации с inference полностью в браузере. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
 
 ---
 
 ## Проекты
 
-### arcanumsearch — cross-community семантический поиск по вселенной игры Arcanum
-*PyTorch · sentence-transformers · BAAI/bge-m3 · Qwen 7B/14B · pgvector/Supabase · HF Spaces · Yandex Cloud Functions · TS/React*
+### arcanumchat — agentic RAG над cross-community корпусом по вселенной Arcanum
 
-[приложение](https://ankorn.github.io/arcanumsearch/) · [код](https://github.com/ankorn/arcanumsearch) · [задачи](https://github.com/ankorn/arcanumsearch/blob/main/TASKS.md)
+_LangChain(custom tools, streaming, memory) · MCP · FastAPI · Docker · PyTorch · sentence-transformers · BAAI/bge-m3 · Qwen 7B/14B · pgvector/Supabase · HF Spaces · Yandex Cloud Functions · TS/React_
 
+[приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn?tab=repositories&q=arcanum&type=&language=&sort=) · [задачи](https://github.com/ankorn/arcanumsearch/blob/main/TASKS.md)
+
+- Написал и задеплоил agentic RAG: LLM вызывает semantic search как tool, ответ стримится токен за токеном по WebSocket, многоходовый диалог реализован с помощью LangChain memory
+- Реализовал MCP-сервер с tool для математики, чтобы агент мог делать вычисления по игровым механикам
+- Развернул прод-контур: FastAPI + Docker для агента, pgvector/Supabase для эмбеддингов, HF Spaces для feature extraction по дообученной модели, Yandex Cloud Functions для скрапинга
 - Обучил dense retriever на `BAAI/bge-m3`; сравнил `MultipleNegativesRankingLoss` и `GISTEmbedLoss`, выбрал оптимум по трейд-оффу recall@k / память / скорость
 - Построил пайплайн генерации синтетических запросов на Qwen: устранил утечку скрытой информации через промпт-инжиниринг, заменил генератор на Qwen-14B — recall@5: 0.90 → 0.96, ndcg@10: 0.70 → 0.73
 - Реализовал майнинг hard negatives на FAISS, что устранило застой метрик (recall@k / ndcg) при дообучении на базовом датасете
-- Развернул инференс в проде: эмбеддинги в PostgreSQL + pgvector (Supabase), KNN-поиск через SQL-функцию, feature extraction на HF Spaces (Zero GPU)
-- Спроектировал data-пайплайн: скрапинг через Yandex Cloud Functions с обходом rate-limit, чанкинг по секциям, дедупликация, фильтрация stub/aggregator-страниц, нормализация Reddit-тредов
 - По результатам продуктового анализа переориентировал продукт на уникальную ценность — cross-community поиск (патчи, моды, баги из Reddit / Nexus Mods), недоступный в нативном поиске Fandom
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
-*PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum · Yandex Cloud Functions · TS/React*
+
+_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum · Yandex Cloud Functions · TS/React_
 
 [приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred) · [задачи](https://github.com/ankorn/redred/blob/main/TASKS.md)
 
@@ -43,26 +48,24 @@
 - Осознанно выбрал браузерный inference (vs Ollama / сервер / widget): приватность данных, нулевые GPU-затраты; для скрапинга Reddit-тредов, изображений и обхода CORS реализовал Yandex Cloud Functions
 - Столкнулся с отсутствием поддержки Gemma 4 в библиотеке ONNX; кастомные экспорты оказались нестабильными, поэтому принял решение использовать базовую модель в проде до обновления ONNX
 
-
-
 ---
 
 ## Навыки
 
 **ML / NLP**
-Text classification · language modeling · seq2seq · attention · transformers · transfer learning · LLM · PEFT/LoRA · RLHF · квантизация · retrieval · agents
+Agentic RAG · Text classification · language modeling · seq2seq · attention · transformers · transfer learning · LLM · PEFT/LoRA · RLHF · квантизация · retrieval
 
 **Обучение моделей**
-Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · систематический HPO · диагностика переобучения и catastrophic forgetting · генерация синтетических данных через LLM
+Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · систематический HPO · диагностика переобучения · генерация синтетических данных через LLM
 
 **Метрики**
 recall@k · ndcg@k · ROUGE(rouge1, rougeLsum) · RAGAS(SummaryScore, SemanticSimilarity)
 
 **Инференс / MLOps**
-ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces (Zero GPU), Supabase Edge Functions, Yandex Cloud Functions
+Docker · ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces, Supabase Edge Functions, Yandex Cloud Functions
 
 **Стек**
-Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · TypeScript, React
+Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · LangChain · TypeScript, React
 
 **Обучение**
 NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/nlp_course)) — обучал модели по всем темам · NLP Course For You · ML Crash Course · Deep Learning Specialization (Andrew Ng)
@@ -72,14 +75,17 @@ NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/
 ## Опыт работы
 
 ### Т-Банк — Frontend Engineer · 2023–2026
-- Настроил мониторинг процессных и продуктовых метрик(с помощью Grafana), индикаторы доступности и алертинг для микрофронтов *(навык, применимый к ML-observability)*
+
+- Настроил мониторинг процессных и продуктовых метрик(с помощью Grafana), индикаторы доступности и алертинг для микрофронтов _(навык, применимый к ML-observability)_
 - Самостоятельно вывел в прод три продукта в микрофронтовой архитектуре личного кабинета
 - Год вёл алгоритмическую секцию технических интервью; менторил стажёра до junior-позиции
 
 ### Fibbee — Frontend Engineer (стартап) · 2021–2023
+
 - Единственный фронтенд-разработчик: построил продукт с нуля (React, TypeScript, Redux Toolkit)
 
 ### Altarix — Frontend Engineer · 2017–2021
+
 - Московская электронная школа: оптимизировал стартовую загрузку страниц на 20%
 - ДОМ.РФ: упростил стек, сократив время разработки логики на 30% (React Query)
 - Вёл внутренний курс по JS, менторил junior-разработчиков
