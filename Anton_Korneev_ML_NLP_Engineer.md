@@ -13,7 +13,7 @@
 
 ## Summary
 
-Инженер с 9-летним опытом продакшн-разработки, специализируюсь на NLP и LLM-приложениях. Строю end-to-end системы: от подготовки данных и обучения моделей до деплоя в прод. Фокус — agentic RAG: retrieval, tool calling, streaming, MCP-интеграции. Реализовал два самостоятельных проекта: cross-community поиск с обученным dense retriever и LLM-агентом поверх него, а также файнтюнинг мультимодальной LLM для суммаризации с inference полностью в браузере. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
+Инженер с 9-летним опытом коммерческой разработки, специализируюсь на LLM-приложениях. Строю end-to-end системы: от подготовки данных и обучения моделей до деплоя. Фокус — agentic RAG: retrieval, tool calling, streaming, memory, MCP. Реализовал два проекта: cross-community поиск с обученными retriever и reranker и LLM-агентом поверх них, а также обученный мультимодальный саммарайзер с inference в браузере. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
 
 ---
 
@@ -21,23 +21,26 @@
 
 ### arcanumchat — agentic RAG над cross-community корпусом по вселенной Arcanum
 
-_LangChain(custom tools, streaming, memory) · MCP · FastAPI · Docker · PyTorch · sentence-transformers · BAAI/bge-m3 · Qwen 7B/14B · pgvector/Supabase · HF Spaces · Yandex Cloud Functions · TS/React_
+_LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge-reranker-v2-m3 · Qwen 3.6 35B · pgvector/Supabase · HF Spaces · vLLM · FastAPI · Docker_
 
-[приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn?tab=repositories&q=arcanum&type=&language=&sort=) · [задачи](https://github.com/ankorn/arcanumsearch/blob/main/TASKS.md)
+[приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
 
-- Написал и задеплоил agentic RAG: LLM вызывает semantic search как tool, ответ стримится токен за токеном по WebSocket, многоходовый диалог реализован с помощью LangChain memory
-- Реализовал MCP-сервер с tool для математики, чтобы агент мог делать вычисления по игровым механикам
-- Развернул прод-контур: FastAPI + Docker для агента, pgvector/Supabase для эмбеддингов, HF Spaces для feature extraction по дообученной модели, Yandex Cloud Functions для скрапинга
-- Обучил dense retriever на `BAAI/bge-m3`; сравнил `MultipleNegativesRankingLoss` и `GISTEmbedLoss`, выбрал оптимум по трейд-оффу recall@k / память / скорость
-- Построил пайплайн генерации синтетических запросов на Qwen: устранил утечку скрытой информации через промпт-инжиниринг, заменил генератор на Qwen-14B — recall@5: 0.90 → 0.96, ndcg@10: 0.70 → 0.73
-- Реализовал майнинг hard negatives на FAISS, что устранило застой метрик (recall@k / ndcg) при дообучении на базовом датасете
-- По результатам продуктового анализа переориентировал продукт на уникальную ценность — cross-community поиск (патчи, моды, баги из Reddit / Nexus Mods), недоступный в нативном поиске Fandom
+- соскрапил из нескольких источников, чанкинг, уникальная ценность (ссылка на дс)
+- построил инференс на vLLM и ситезировал запросы той же моделью, что и в агенте на проде - Qwen 3.6 35B 
+- в ручную разметил датасет для оценки, реализовал код оценки с помощью попарного бутстрапа и доверительных интервалов
+- обучил bi-encoder bge-m3 и cross-encoder bge-reranker-v2-m3 на hard-negative датасетах, получил статзначимый приорист по сравнению с базовыми моделями: recall@10 0.89 -> 0.95 (95% CI [0.0211, 0.1000]); ndcg@10: 0.79 -> 0.87 (95% CI [0.0484, 0.1175])
+- задеплоил модели в HF Spaces
+- поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
+- написал серверную логику агента с помощью LangChain, FastAPI, для streaming использовал WebSocket
+- в качестве LLM для агента использовал Qwen3.6-35B-A3B
+- реализовал MCP-сервер с tool для математики
+- задеплоил сервер с помощью Docker
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
-_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum · Yandex Cloud Functions · TS/React_
+_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum_
 
-[приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred) · [задачи](https://github.com/ankorn/redred/blob/main/TASKS.md)
+[приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred)
 
 - Дообучил мультимодальную LLM (Gemma 4, image + text) на mRedditSum через LoRA/Unsloth — **rougeLsum 0.29 → 0.32, rouge1 0.37 → 0.46**
 - Построил пайплайн оценки качества на RAGAS с LLM-as-judge (Qwen3-4B-Instruct) и семантической близостью на эмбеддингах (Qwen3-Embedding-8B), позволяющий измерять качество сверх n-граммных метрик. Выявил расхождение между ROUGE и семантическими метриками; ограниченный размер eval-выборки задокументирован как направление для дальнейшей работы
