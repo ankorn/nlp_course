@@ -13,7 +13,7 @@
 
 ## Summary
 
-Инженер с 9-летним опытом коммерческой разработки, специализируюсь на LLM-приложениях. Строю end-to-end системы: от подготовки данных и обучения моделей до деплоя. Фокус — agentic RAG: retrieval, tool calling, streaming, memory, MCP. Реализовал два проекта: cross-community поиск с обученными retriever и reranker и LLM-агентом поверх них, а также обученный мультимодальный саммарайзер с inference в браузере. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
+Инженер с 9-летним опытом коммерческой разработки, специализируюсь на LLM-приложениях. Строю системы от подготовки данных и обучения моделей до деплоя. Фокус — agentic RAG: retrieval, tool calling, streaming, memory, MCP. Реализовал два проекта: cross-community поиск с обученными retriever и reranker и LLM-агентом поверх них, а также обученный мультимодальный саммарайзер с инференсом в браузере. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
 
 ---
 
@@ -25,31 +25,26 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 
 [приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
 
-- соскрапил из нескольких источников, чанкинг, уникальная ценность (ссылка на дс) (поправить readme)
-- построил инференс на vLLM и ситезировал запросы той же моделью, что и в агенте на проде - Qwen 3.6 35B 
-- в ручную разметил датасет для оценки, реализовал код оценки с помощью попарного бутстрапа и доверительных интервалов
-- обучил bi-encoder bge-m3 и cross-encoder bge-reranker-v2-m3 на hard-negative датасетах, получил статзначимый приорист по сравнению с базовыми моделями: recall@10 0.89 -> 0.95 (95% CI [0.0211, 0.1000]); ndcg@10: 0.79 -> 0.87 (95% CI [0.0484, 0.1175])
-- задеплоил модели в HF Spaces
-- поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
-- написал серверную логику агента с помощью LangChain, FastAPI, для streaming использовал WebSocket
-- в качестве LLM для агента использовал Qwen3.6-35B-A3B
-- инструменты агента: retrieval пайплайн и инструмент для математики на MCP-сервере
-- задеплоил сервер с помощью Docker
+- Соскрапил документы из разнородных источников(arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-аггрегаторы, определил чанкинг документов, нормализовал треды
+- Построил инференс на vLLM и сгенерировал синтетические запросы той же моделью, что и в агенте на проде - Qwen3.6-35B-A3B, выполнил на NVIDIA A100 80GB
+- В ручную разметил [датасет](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) для оценки, реализовал алгоритм оценки с помощью попарного бутстрапа и доверительных интервалов
+- Обучил bi-encoder [bge-m3]() и cross-encoder [bge-reranker-v2-m3]() на hard-negative датасетах, получил статзначимый приорист: **recall@10 0.89 -> 0.95** (95% ДИ [0.0211, 0.1000]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0484, 0.1175])
+- Задеплоил retriever и reranker в HF Spaces
+- Поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
+- Написал серверную логику агента с помощью LangChain и FastAPI, для streaming использовал WebSocket
+- Инструменты агента: retrieval пайплайн и инструмент для математики на MCP-сервере
+- Задеплоил сервер с помощью Docker
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
-_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum_
+_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum · RAGAS_
 
 [приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred)
 
-- Дообучил мультимодальную LLM (Gemma 4, image + text) на mRedditSum через LoRA/Unsloth — **rougeLsum 0.29 → 0.32, rouge1 0.37 → 0.46**
-- Построил пайплайн оценки качества на RAGAS с LLM-as-judge (Qwen3-4B-Instruct) и семантической близостью на эмбеддингах (Qwen3-Embedding-8B), позволяющий измерять качество сверх n-граммных метрик. Выявил расхождение между ROUGE и семантическими метриками; ограниченный размер eval-выборки задокументирован как направление для дальнейшей работы
-- Провёл систематический тюнинг гиперпараметров (learning rate, LoRA rank, dropout, weight decay, scheduler, label smoothing); диагностировал переобучение при высоком LoRA rank
-- Принял продуктовое решение о смене подхода: TL;DR-датасет давал слишком короткие ироничные саммари → перешёл на мультимодальный mRedditSum, т.к. на Reddit изображение несёт ключевой смысл
-- Решил инженерные проблемы обучения: OOM при eval (`preprocess_logits_for_metrics`, кастомный `prediction_step`), ROUGE-based checkpoint selection и early stopping
-- Настроил браузерный inference: ONNX Runtime Web со streaming-генерацией, форматирование мультимодального ввода идентично обучению
-- Осознанно выбрал браузерный inference (vs Ollama / сервер / widget): приватность данных, нулевые GPU-затраты; для скрапинга Reddit-тредов, изображений и обхода CORS реализовал Yandex Cloud Functions
-- Столкнулся с отсутствием поддержки Gemma 4 в библиотеке ONNX; кастомные экспорты оказались нестабильными, поэтому принял решение использовать базовую модель в проде до обновления ONNX
+- Дообучил мультимодальную LLM gemma-4-E2B-it, квантизованную в 4 бита, на mRedditSum с помощью LoRA и Unsloth — **rougeLsum 0.29 → 0.32, rouge1 0.37 → 0.46**
+- Построил пайплайн оценки на RAGAS с Qwen3-4B-Instruct в качестве LLM-as-judge
+- Настроил браузерный инференс ONNX Runtime Web со streaming-генерацией
+- Скрапинг Reddit тредов и изображений реализовал с помощью Yandex Cloud Functions
 
 ---
 
@@ -62,13 +57,13 @@ Agentic RAG · Text classification · language modeling · seq2seq · attention 
 Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · систематический HPO · диагностика переобучения · генерация синтетических данных через LLM
 
 **Метрики**
-recall@k · ndcg@k · ROUGE(rouge1, rougeLsum) · RAGAS(SummaryScore, SemanticSimilarity)
+recall@k · ndcg@k · ROUGE(rouge1, rougeLsum) · попарный бустрап, доверительные интервалы · RAGAS(SummaryScore, SemanticSimilarity)
 
 **Инференс / MLOps**
 Docker · ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces, Supabase Edge Functions, Yandex Cloud Functions
 
 **Стек**
-Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · LangChain · TypeScript, React
+Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · LangChain
 
 **Обучение**
 NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/nlp_course)) — обучал модели по всем темам · NLP Course For You · ML Crash Course · Deep Learning Specialization (Andrew Ng)
