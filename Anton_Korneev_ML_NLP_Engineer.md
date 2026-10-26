@@ -27,21 +27,25 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 
 - Соскрапил документы из разнородных источников(arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-аггрегаторы, определил чанкинг документов, нормализовал треды
 - Построил инференс на vLLM и сгенерировал синтетические запросы той же моделью, что и в агенте на проде - Qwen3.6-35B-A3B, выполнил на NVIDIA A100 80GB
-- В ручную разметил [датасет](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) для оценки, реализовал алгоритм оценки с помощью попарного бутстрапа и доверительных интервалов
-- Обучил bi-encoder [bge-m3]() и cross-encoder [bge-reranker-v2-m3]() на hard-negative датасетах, получил статзначимый приорист: **recall@10 0.89 -> 0.95** (95% ДИ [0.0211, 0.1000]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0484, 0.1175])
+- Распределил документы по сплитам [датасета](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) так, чтобы каждый документ был только в одном сплите
+- В ручную разметил датасет из 200 запросов для оценки, реализовал алгоритм оценки с помощью попарного бутстрапа и доверительных интервалов
+- Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3) на hard-negative датасетах, получил статзначимый приорист: **recall@10 0.89 -> 0.95** (95% ДИ [0.0211, 0.1000]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0484, 0.1175])
 - Задеплоил retriever и reranker в HF Spaces
 - Поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
-- Написал серверную логику агента с помощью LangChain и FastAPI, для streaming использовал WebSocket
+- Написал серверную логику агента с помощью LangChain и FastAPI; streaming по WebSocket, memory с помощью thread_id
 - Инструменты агента: retrieval пайплайн и инструмент для математики на MCP-сервере
 - Задеплоил сервер с помощью Docker
 
+<br/><br/><br/><br/>
+
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
-_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · Optimum · RAGAS_
+_PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX Runtime Web · WebGPU · Optimum · RAGAS_
 
 [приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred)
 
-- Дообучил мультимодальную LLM gemma-4-E2B-it, квантизованную в 4 бита, на mRedditSum с помощью LoRA и Unsloth — **rougeLsum 0.29 → 0.32, rouge1 0.37 → 0.46**
+- Дообучил мультимодальную LLM gemma-4-E2B-it, на mRedditSum с помощью LoRA и Unsloth — **rougeLsum 0.29 → 0.32, rouge1 0.37 → 0.46**
+- Модель, квантизованная в 4 бита, выполняется с помощью WebGPU и весит 3.5GB
 - Построил пайплайн оценки на RAGAS с Qwen3-4B-Instruct в качестве LLM-as-judge
 - Настроил браузерный инференс ONNX Runtime Web со streaming-генерацией
 - Скрапинг Reddit тредов и изображений реализовал с помощью Yandex Cloud Functions
@@ -54,7 +58,7 @@ _PyTorch · HF Transformers · Unsloth · Gemma 4 (multimodal) · LoRA · ONNX R
 Agentic RAG · Text classification · language modeling · seq2seq · attention · transformers · transfer learning · LLM · PEFT/LoRA · RLHF · квантизация · retrieval
 
 **Обучение моделей**
-Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · систематический HPO · диагностика переобучения · генерация синтетических данных через LLM
+Dense retrieval, contrastive learning(MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · файнтюнинг мультимодальных LLM · диагностика переобучения · генерация синтетических данных через LLM
 
 **Метрики**
 recall@k · ndcg@k · ROUGE(rouge1, rougeLsum) · попарный бустрап, доверительные интервалы · RAGAS(SummaryScore, SemanticSimilarity)
@@ -74,7 +78,7 @@ NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/
 
 ### Т-Банк — Frontend Engineer · 2023–2026
 
-- Настроил мониторинг процессных и продуктовых метрик(с помощью Grafana), индикаторы доступности и алертинг для микрофронтов _(навык, применимый к ML-observability)_
+- Настроил мониторинг процессных и продуктовых метрик(с помощью Grafana), индикаторы доступности и алертинг для микрофронтов
 - Самостоятельно вывел в прод три продукта в микрофронтовой архитектуре личного кабинета
 - Год вёл алгоритмическую секцию технических интервью; менторил стажёра до junior-позиции
 
