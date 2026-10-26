@@ -25,11 +25,11 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 
 [приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
 
-- Соскрапил документы из разнородных источников(arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-аггрегаторы, определил чанкинг документов, нормализовал треды
+- Реализовал скрапинг документов из разнородных источников(arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-агрегаторы, определил чанкинг документов, нормализовал треды
 - Построил инференс на vLLM и сгенерировал синтетические запросы той же моделью, что и в агенте на проде - Qwen3.6-35B-A3B, выполнил на NVIDIA A100 80GB
 - Распределил документы по сплитам [датасета](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) так, чтобы каждый документ был только в одном сплите
-- В ручную разметил датасет из 200 запросов для оценки, реализовал алгоритм оценки с помощью попарного бутстрапа и доверительных интервалов
-- Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3) на hard-negative датасетах, получил статзначимый приорист: **recall@10 0.89 -> 0.95** (95% ДИ [0.0211, 0.1000]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0484, 0.1175])
+- Вручную написал и разметил 200 запросов для оценки, реализовал алгоритм оценки с помощью попарного бутстрапа по запросам и доверительного интервала
+- Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3) на hard-negative датасетах, получил статзначимый прирост: **recall@10 0.89 -> 0.95** (95% ДИ [0.0211, 0.1000]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0484, 0.1175])
 - Задеплоил retriever и reranker в HF Spaces
 - Поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
 - Написал серверную логику агента с помощью LangChain и FastAPI; streaming по WebSocket, memory с помощью thread_id
