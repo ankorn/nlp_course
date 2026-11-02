@@ -29,14 +29,14 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 - Построил инференс на vLLM и сгенерировал синтетические запросы Qwen3.6-35B-A3B-FP8, выполнил на NVIDIA A100 80GB
 - Распределил документы по сплитам [датасета](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) так, чтобы каждый документ был только в одном сплите
 - Вручную написал и разметил 200 запросов для оценки, реализовал алгоритм оценки с помощью парного бутстрапа по запросам и доверительного интервала
-- Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах, получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/eval_retriever.ipynb): **recall@10 0.90 -> 0.96** (95% ДИ [0.0260, 0.0990]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0406, 0.1170])
+- Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах, получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_eval.ipynb): **recall@10 0.90 -> 0.96** (95% ДИ [0.0260, 0.0990]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0406, 0.1170])
+- Реализовал гибридный поиск (dense + bm25, Reciprocal Rank Fusion) со [статистически значимым результатом](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_hybrid_search_eval.ipynb) **recall@5 0.90 -> 0.92** (95% ДИ [0.0052, 0.0417]) для 10 документов
 - Задеплоил retriever и reranker в HF Spaces
 - Поместил ембеддинги в Supabase с помощью pgvector, добавил sql функцию knn и edge функцию для поиска и реранжирования релевантных документов
 - Написал серверную логику агента с помощью LangChain и FastAPI; streaming по WebSocket, memory с помощью thread_id
 - В основе агента облачный Qwen3.6-35B-A3B через OpenAI-совместимый API; инструменты агента — retrieval пайплайн и инструмент для математики на MCP-сервере
 - Задеплоил сервер с помощью Docker
 
-<br/><br/>
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
