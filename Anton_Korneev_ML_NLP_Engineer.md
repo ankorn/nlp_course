@@ -26,8 +26,7 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 [приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
 
 - Реализовал скрапинг документов из разнородных источников (arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-агрегаторы, применил структурный чанкинг документов по секциям википедии, нормализовал треды
-- Построил инференс на vLLM и сгенерировал синтетические запросы Qwen3.6-35B-A3B-FP8, выполнил на NVIDIA A100 80GB
-- Распределил документы по сплитам [датасета](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) так, чтобы каждый документ был только в одном сплите
+- Построил инференс Qwen3.6-35B-A3B-FP8 на vLLM и сгенерировал [датасет](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) синтетических запросов, выполнил на NVIDIA A100 80GB
 - Вручную написал и разметил 200 запросов для оценки, реализовал алгоритм оценки с помощью парного бутстрапа по запросам и доверительного интервала
 - Обучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах, получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_eval.ipynb): **recall@10 0.90 -> 0.96** (95% ДИ [0.0260, 0.0990]); **ndcg@10: 0.79 -> 0.87** (95% ДИ [0.0406, 0.1170])
 - Реализовал гибридный поиск (dense + bm25, Reciprocal Rank Fusion) со [статистически значимым результатом](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_hybrid_search_eval.ipynb) **recall@5 0.90 -> 0.92** (95% ДИ [0.0052, 0.0417]) для 10 документов
@@ -37,6 +36,7 @@ _LangChain · MCP · PyTorch · sentence-transformers · BAAI/bge-m3 · BAAI/bge
 - В основе агента облачный Qwen3.6-35B-A3B через OpenAI-совместимый API; инструменты агента — retrieval пайплайн и инструмент для математики на MCP-сервере
 - Задеплоил сервер с помощью Docker
 
+<br/>
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
