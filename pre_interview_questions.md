@@ -101,3 +101,5 @@ Streaming-генерация в ONNX Runtime Web: передача токено�
 С Triton Inference Server пока не работал.
 
 ---
+
+Accomplished [X], as measured by [Y], by doing [Z]
