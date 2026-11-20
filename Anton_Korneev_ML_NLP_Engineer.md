@@ -25,23 +25,21 @@ _PyTorch · sentence-transformers · LangChain · MCP · bge-m3 · bge-reranker-
 
 [приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
 
-- Улучшил качество RAG на выборке из 20 кандидатов: получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_eval.ipynb) **recall@10 0.90 -> 0.96** и **ndcg@10: 0.79 -> 0.87** (95% доверительный интервал прироста [0.0260, 0.0990] и [0.0406, 0.1170] соответственно). Для этого дообучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах; значимость оценил с помощью парного бутстрапа по запросам и доверительных интервалов
-- Улучшил качество RAG на выборке из 10 кандидатов, получив небольшой, но [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_hybrid_search_eval.ipynb) **recall@5 0.90 -> 0.92** (95% доверительный интервал [0.0052, 0.0417]): реализовал гибридный поиск dense + BM25 и RRF
+- Улучшил качество RAG на выборке из 20 кандидатов: получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_eval.ipynb) **recall@10 +6.7%** (recall@10 = 0.90 → recall@10 = 0.96) и **NDCG@10 +10.1%** (NDCG@10 = 0.79 → NDCG@10 = 0.87) (95% доверительный интервал прироста [0.0260, 0.0990] и [0.0406, 0.1170] соответственно). Для этого дообучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах; значимость оценил с помощью парного бутстрапа по запросам и доверительных интервалов
+- Улучшил качество RAG на выборке из 10 кандидатов, получив небольшой, но [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_hybrid_search_eval.ipynb) **recall@5 +2.2%** (recall@5 = 0.90 → recall@5 = 0.92) (95% доверительный интервал [0.0052, 0.0417]): реализовал гибридный поиск dense + BM25 и RRF; оценил методом парного бутстрапа по запросам и доверительных интервалов
 - Сгенерировал [датасет](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) из 5000 синтетических запросов для RAG: запустил Qwen3.6-35B-A3B-FP8 с помощью vLLM на NVIDIA A100 80GB, построил пайплайн генерации, написал и протестировал промпты; датасет использован для дообучения retrieval-моделей
 - Реализовал скрапинг более 1000 документов из разнородных источников (arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-агрегаторы, применил структурный чанкинг документов по секциям википедии, нормализовал треды
 - Задеплоил retriever и reranker в HF Spaces; поместил ембеддинги в Supabase с помощью pgvector, добавил SQL функцию KNN
 - Написал серверную логику агента с помощью LangChain и FastAPI; streaming по WebSocket, memory с помощью thread_id; задеплоил сервер с помощью Docker
 - В основе агента облачный Qwen3.6-35B-A3B через OpenAI-совместимый API; инструменты агента — retrieval пайплайн и инструмент для математики на MCP-сервере
 
-<br/>
 
 ### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
 
 _PyTorch · HF Transformers · Unsloth · gemma-4-E2B-it (multimodal) · Qwen3-4B-Instruct · LoRA · ONNX Runtime Web · WebGPU · Optimum · RAGAS_
 
 [приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred)
-
-- Улучшил качество суммаризации, получив прирост **ROUGE-Lsum +10,3%, ROUGE-1 +24,3%**. Для этого дообучил мультимодальную LLM gemma-4-E2B-it, на mRedditSum с помощью LoRA и Unsloth 
+- Улучшил качество суммаризации, получив прирост **ROUGE-Lsum +10.3%** (ROUGE-Lsum = 0.29 → ROUGE-Lsum = 0.32), **ROUGE-1 +24.3%** (ROUGE-1 = 0.37 → ROUGE-1 = 0.46). Для этого дообучил мультимодальную LLM gemma-4-E2B-it на датасете mRedditSum с помощью LoRA и Unsloth 
 - Настроил браузерный инференс ONNX Runtime Web со streaming-генерацией; модель, квантизованная в 4 бита, весит 3.5GB и выполняется с помощью WebGPU
 - Построил пайплайн оценки на RAGAS с Qwen3-4B-Instruct в качестве LLM-as-judge; использовал для сравнения SummarizationScore базовой и дообученной моделей
 - Реализовал скрапинг Reddit тредов и изображений с помощью Yandex Cloud Functions
@@ -64,7 +62,7 @@ Agentic RAG · Text classification · language modeling · seq2seq · attention 
 Dense retrieval, contrastive learning (MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · дообучение мультимодальных LLM · генерация синтетических данных через LLM
 
 **Метрики**
-recall@k · ndcg@k · ROUGE (ROUGE-Lsum, ROUGE-1) · парный бустрап · доверительные интервалы · RAGAS (SummarizationScore)
+recall@k · NDCG@k · ROUGE (ROUGE-Lsum, ROUGE-1) · парный бустрап · доверительные интервалы · RAGAS (SummarizationScore)
 
 **Инференс / MLOps**
 Docker · ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces, Supabase Edge Functions, Yandex Cloud Functions
