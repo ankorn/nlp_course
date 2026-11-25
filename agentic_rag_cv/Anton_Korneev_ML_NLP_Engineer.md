@@ -1,0 +1,92 @@
+---
+---
+
+---
+
+# Антон Корнеев
+
+**ML/NLP Engineer** · Agentic RAG · NLP · LLM · LangChain · PyTorch · HF Transformers
+
++7 993 465 45 10 · telegram: @ankornlog · an.korn.zasekin@gmail.ru · [GitHub](https://github.com/ankorn) · [HuggingFace](https://huggingface.co/pameydorke)
+
+---
+
+## Summary
+
+Год назад прошёл аттестацию ML/NLP в Т-Банке с результатом **junior+** и онбординг в команде телефонии, а затем реализовал два своих проекта: cross-community поиск с дообученными Retriever/Reranker и LLM-агентом, а также мультимодальная суммаризация с дообученной  моделью. Строю LLM-приложения от подготовки данных и обучения моделей до деплоя. Фокус — agentic RAG: retrieval, tool calling, streaming, memory, MCP. Ищу позицию ML/NLP Engineer с уклоном в LLM-агентов.
+
+---
+
+## Проекты
+
+### arcanumchat — agentic RAG над cross-community поиском по вселенной Arcanum
+
+_LangChain · PyTorch · sentence-transformers · MCP · bge-m3 · bge-reranker-v2-m3 · Qwen3.6-35B-A3B · pgvector/Supabase · HF Spaces · vLLM · FastAPI · Docker_
+
+[приложение](https://ankorn.github.io/arcanumchat/) · [код](https://github.com/ankorn/arcanumsearch)
+
+- Улучшил качество RAG на выборке из 20 кандидатов: получил [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_eval.ipynb) **recall@10 +6.7%** (recall@10 = 0.90 → recall@10 = 0.96) и **NDCG@10 +10.1%** (NDCG@10 = 0.79 → NDCG@10 = 0.87) (95% доверительный интервал прироста [0.0260, 0.0990] и [0.0406, 0.1170] соответственно). Для этого дообучил bi-encoder [bge-m3](https://huggingface.co/pameydorke/arcanumchat-retriever-bge-m3-v2) и cross-encoder [bge-reranker-v2-m3](https://huggingface.co/pameydorke/arcanumchat-reranker-bge-reranker-v2-m3-v2) на hard-negative датасетах; значимость оценил с помощью парного бутстрапа по запросам и доверительных интервалов
+- Улучшил качество RAG на выборке из 10 кандидатов, получив небольшой, но [статистически значимый прирост](https://github.com/ankorn/arcanumsearch/blob/main/retrieval_hybrid_search_eval.ipynb) **recall@5 +2.2%** (recall@5 = 0.90 → recall@5 = 0.92) (95% доверительный интервал [0.0052, 0.0417]): реализовал гибридный поиск dense + BM25 и RRF; оценил методом парного бутстрапа по запросам и доверительных интервалов
+- Написал серверную логику агента с помощью LangChain и FastAPI; streaming по WebSocket, memory с помощью thread_id; задеплоил сервер с помощью Docker
+- В основе агента облачный Qwen3.6-35B-A3B через OpenAI-совместимый API; инструменты агента — retrieval пайплайн и инструмент для математики на MCP-сервере
+- Сгенерировал [датасет](https://huggingface.co/datasets/pameydorke/arcanumchat-cross-platform-with-vague-queries-qwen-36-a3b-fp8) из 5000 синтетических запросов для RAG: запустил Qwen3.6-35B-A3B-FP8 с помощью vLLM на NVIDIA A100 80GB, построил пайплайн генерации, написал и протестировал промпты; датасет использован для дообучения retrieval-моделей
+- Реализовал скрапинг более 1000 документов из разнородных источников (arcanum wiki, Reddit треды, описание патчей и модов), убрал документы-агрегаторы, применил структурный чанкинг документов по секциям википедии, нормализовал треды
+- Задеплоил retriever и reranker в HF Spaces; поместил ембеддинги в Supabase с помощью pgvector, добавил SQL функцию KNN
+
+
+### redred — мультимодальный саммарайзер постов Reddit, работающий в браузере
+
+_PyTorch · HF Transformers · Unsloth · gemma-4-E2B-it (multimodal) · Qwen3-4B-Instruct · LoRA · ONNX Runtime Web · WebGPU · Optimum · RAGAS_
+
+[приложение](https://ankorn.github.io/redred/) · [код](https://github.com/ankorn/redred)
+- Улучшил качество суммаризации, получив прирост **ROUGE-Lsum +10.3%** (ROUGE-Lsum = 0.29 → ROUGE-Lsum = 0.32), **ROUGE-1 +24.3%** (ROUGE-1 = 0.37 → ROUGE-1 = 0.46). Для этого дообучил мультимодальную LLM gemma-4-E2B-it на датасете mRedditSum с помощью LoRA и Unsloth 
+- Настроил браузерный инференс ONNX Runtime Web со streaming-генерацией; модель, квантизованная в 4 бита, весит 3.5GB и выполняется с помощью WebGPU
+- Построил пайплайн оценки на RAGAS с Qwen3-4B-Instruct в качестве LLM-as-judge; использовал для сравнения SummarizationScore базовой и дообученной моделей
+- Реализовал скрапинг Reddit тредов и изображений с помощью Yandex Cloud Functions
+
+---
+
+## Аттестация и онбординг
+
+- Прошёл аттестацию ML/NLP в Т-Банке по секциям: алгоритмы — senior-; классическое ML — junior+: NLP — junior+. Грейд по результатам секций — junior+
+- Прошёл онбординг в команде телефонии Т-Банка: освоил LangFuse для трейсинга LLM-приложений и промпт-инжиниринг по RTCF Framework
+
+---
+
+## Навыки
+
+**ML / NLP**
+Agentic RAG · Text classification · language modeling · seq2seq · attention · transformers · transfer learning · LLM · PEFT/LoRA · квантизация · retrieval
+
+**Обучение моделей**
+Dense retrieval, contrastive learning (MultipleNegativesRankingLoss, GISTEmbedLoss), hard negative mining · дообучение мультимодальных LLM · генерация синтетических данных через LLM
+
+**Метрики**
+recall@k · NDCG@k · ROUGE (ROUGE-Lsum, ROUGE-1) · парный бустрап · доверительные интервалы · RAGAS (SummarizationScore)
+
+**Инференс / MLOps**
+Docker · ONNX / Optimum, квантизация (q4/q8), браузерный inference (ONNX Runtime Web) · vector search (pgvector, KNN) · деплой на HF Spaces, Supabase Edge Functions, Yandex Cloud Functions
+
+**Стек**
+Python, PyTorch, HF Transformers/Datasets/PEFT, Unsloth, sentence-transformers · LangChain · LangFuse
+
+**Обучение**
+NLP-курс ШАД ([форк с решениями](https://github.com/ankorn/nlp_course)) — обучал модели по всем темам · NLP Course For You
+
+---
+
+## Опыт работы
+
+### Т-Банк — Frontend Engineer · 2023–2026
+
+- Настроил мониторинг процессных и продуктовых метрик (с помощью Grafana), индикаторы доступности и алертинг для микрофронтов
+- Самостоятельно вывел в прод три продукта в микрофронтовой архитектуре личного кабинета
+- Год вёл алгоритмическую секцию технических интервью; менторил стажёра до junior-позиции
+
+---
+
+## Дополнительно
+
+- **Английский:** C1
+
+---
