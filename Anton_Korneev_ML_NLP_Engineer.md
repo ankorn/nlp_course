@@ -7,7 +7,7 @@
 
 **ML/NLP Engineer** · NLP · LLM · LangChain · PyTorch · HF Transformers · Agentic RAG
 
-+7 993 465 45 10 · telegram: @ankornlog · an.korn.zasekin@gmail.ru · [GitHub](https://github.com/ankorn) · [HuggingFace](https://huggingface.co/pameydorke)
++7 993 465 45 10 · [telegram](https://t.me/ankornlog) · an.korn.zasekin@gmail.ru · [GitHub](https://github.com/ankorn) · [HuggingFace](https://huggingface.co/pameydorke)
 
 ---
 
